@@ -49,7 +49,7 @@ try {
 }
 
 if (isset($_POST['submit']) && $_POST['submit'] == 'Analyze') {
-    $uriBase = 'https://westcentralus.api.cognitive.microsoft.com/vision/v2.0/';
+    $uriBase = 'https://southeastasia.api.cognitive.microsoft.com/vision/v2.0/';
     $imageUrl = $_POST['url'];
     $ocpApimSubscriptionKey = getenv('SAS_KEY');
 
