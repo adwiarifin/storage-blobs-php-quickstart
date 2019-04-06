@@ -3,11 +3,25 @@
 require_once 'vendor/autoload.php';
 require_once "./random_string.php";
 
+use HTTP\Request2;
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
 use MicrosoftAzure\Storage\Blob\Models\CreateContainerOptions;
 use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
+
+$request = new HTTP_Request2('http://pear.php.net/', HTTP_Request2::METHOD_GET);
+try {
+    $response = $request->send();
+    if (200 == $response->getStatus()) {
+        echo $response->getBody();
+    } else {
+        echo 'Unexpected HTTP status: ' . $response->getStatus() . ' ' .
+             $response->getReasonPhrase();
+    }
+} catch (HTTP_Request2_Exception $e) {
+    echo 'Error: ' . $e->getMessage();
+}
 
 $connectionString = "DefaultEndpointsProtocol=https;AccountName=".getenv('ACCOUNT_NAME').";AccountKey=".getenv('ACCOUNT_KEY');
 
