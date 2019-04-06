@@ -139,7 +139,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'Analyze') {
             <form method="POST" enctype="multipart/form-data">
                 Upload Image: 
                 <input type="file" name="image" />
-                <input type="submit" name="Upload" />
+                <input type="submit" name="submit" value="Upload" />
             </form>
         </div>
 
