@@ -53,7 +53,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'Analyze') {
     $imageUrl = $_POST['url'];
     $ocpApimSubscriptionKey = getenv('SAS_KEY');
 
-    $request = new Http_Request2($uriBase . '/analyze');
+    $request = new HTTP_Request2($uriBase . '/analyze');
     $url = $request->getUrl();
 
     $headers = array(
