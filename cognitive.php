@@ -10,19 +10,6 @@ use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
 use MicrosoftAzure\Storage\Blob\Models\CreateContainerOptions;
 use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
 
-$request = new HTTP_Request2('https://pear.php.net/', HTTP_Request2::METHOD_GET);
-try {
-    $response = $request->send();
-    if (200 == $response->getStatus()) {
-        echo $response->getBody();
-    } else {
-        echo 'Unexpected HTTP status: ' . $response->getStatus() . ' ' .
-             $response->getReasonPhrase();
-    }
-} catch (HTTP_Request2_Exception $e) {
-    echo 'Error: ' . $e->getMessage();
-}
-
 $connectionString = "DefaultEndpointsProtocol=https;AccountName=".getenv('ACCOUNT_NAME').";AccountKey=".getenv('ACCOUNT_KEY');
 
 // Create blob client.
@@ -59,6 +46,45 @@ try {
     $code = $e->getCode();
     $error_message = $e->getMessage();
     echo $code.": ".$error_message."<br />";
+}
+
+if (isset($_POST['submit']) && $_POST['submit'] == 'Analyze') {
+    $uriBase = 'https://westcentralus.api.cognitive.microsoft.com/vision/v2.0/';
+    $imageUrl = $_POST['url'];
+    $ocpApimSubscriptionKey = getenv('SAS_KEY');
+
+    $request = new Http_Request2($uriBase . '/analyze');
+    $url = $request->getUrl();
+
+    $headers = array(
+        // Request headers
+        'Content-Type' => 'application/json',
+        'Ocp-Apim-Subscription-Key' => $ocpApimSubscriptionKey
+    );
+    $request->setHeader($headers);
+
+    $parameters = array(
+        // Request parameters
+        'visualFeatures' => 'Categories,Description',
+        'details' => '',
+        'language' => 'en'
+    );
+    $url->setQueryVariables($parameters);
+
+    $request->setMethod(HTTP_Request2::METHOD_POST);
+
+    // Request body parameters
+    $body = json_encode(array('url' => $imageUrl));
+
+    // Request body
+    $request->setBody($body);
+
+    try {
+        $response = $request->send();
+        $analyze[$imageUrl] = $response->getBody();
+    } catch (HttpException $ex){
+        echo "<pre>" . $ex . "</pre>";
+    }
 }
 ?>
 
@@ -100,7 +126,13 @@ try {
             <tr>
                 <td><?php echo $no++; ?></td>
                 <td><img src="<?php echo $blob['url']; ?>" alt="<?php echo $blob['name']; ?>" width="200"></td>
-                <td><button>Analyze</button></td>
+                <td>
+                    <form method="POST">
+                        <input type="hidden" name="url" value="<?php echo $blob['url']; ?>" />
+                        <input type="submit" name="submit" value="Analyze"/>
+                    </form>
+                    <?php echo isset($analyze[$blob['url']]) ? "<pre>" .json_encode(json_decode($analyze[$blob['url']]), JSON_PRETTY_PRINT) . "</pre>" : ""?>
+                </td>
             </tr>
             <?php endforeach; ?>
         </tbody>
