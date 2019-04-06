@@ -17,16 +17,23 @@ $containerName = "adwicontainer";
 try {
     echo "These are the blobs present in the container: ";
 
+    echo "<table>";
+    echo "<thead>";
+    echo "  <tr>";
+    echo "    <th>Name</th>";
+    echo "    <th>Action</th>";
+    echo "  </tr>";
+    echo "</thead>";
+    echo "<tbody>";
     do{
         $result = $blobClient->listBlobs($containerName, $listBlobsOptions);
-        foreach ($result->getBlobs() as $blob)
-        {
-            echo $blob->getName().": ".$blob->getUrl()."<br />";
+        foreach ($result->getBlobs() as $blob) {
+            echo "<tr><td><a href=\"".$blob->getUrl()."\">".$blob->getName()."</a></td></tr>";
         }
     
         $listBlobsOptions->setContinuationToken($result->getContinuationToken());
     } while($result->getContinuationToken());
-    echo "<br />";
+    echo "</tbody>";
 } catch(ServiceException $e) {
     // Handle exception based on error codes and messages.
     // Error codes and messages are here:
