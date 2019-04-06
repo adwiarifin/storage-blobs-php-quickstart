@@ -31,7 +31,6 @@ try {
     
         $listBlobsOptions->setContinuationToken($result->getContinuationToken());
     } while($result->getContinuationToken());
-    echo "</tbody>";
 } catch(ServiceException $e) {
     // Handle exception based on error codes and messages.
     // Error codes and messages are here:
