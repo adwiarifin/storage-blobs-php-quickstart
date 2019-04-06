@@ -15,6 +15,7 @@ $connectionString = "DefaultEndpointsProtocol=https;AccountName=".getenv('ACCOUN
 // Create blob client.
 $blobClient = BlobRestProxy::createBlobService($connectionString);
 $containerName = "adwicontainer";
+$data = array();
 
 if (isset($_POST['submit']) && $_POST['submit'] == 'Upload') {
     try {
@@ -22,6 +23,12 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'Upload') {
         $fileToUpload = $_FILES["image"]["name"];
         $content      = fopen($_FILES["image"]["tmp_name"], "r");
         $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
+
+        $blob = $blobClient->getBlob($containerName, $fileToUpload);
+        $data[] = array(
+            'name' => $blob->getName(),
+            'url' => $blob->getUrl()
+        );
     } catch(ServiceException $e) {
         // Handle exception based on error codes and messages.
         // Error codes and messages are here:
@@ -40,8 +47,6 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'Upload') {
 }
 
 try {
-    $data = array();
-
     // List blobs.
     $listBlobsOptions = new ListBlobsOptions();
     do{
