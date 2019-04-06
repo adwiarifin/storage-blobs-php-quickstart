@@ -48,6 +48,13 @@ try {
     echo $code.": ".$error_message."<br />";
 }
 
+if (isset($_POST['submit']) && $_POST['submit'] == 'Upload') {
+    //Upload blob
+    $fileToUpload = $_FILES["image"]["name"];
+    $content      = fopen($_FILES["image"]["tmp_name"], "r");
+    $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
+}
+
 if (isset($_POST['submit']) && $_POST['submit'] == 'Analyze') {
     $uriBase = 'https://southeastasia.api.cognitive.microsoft.com/vision/v2.0/';
     $imageUrl = $_POST['url'];
@@ -111,6 +118,14 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'Analyze') {
         <div class="starter-template">
             <h1>Azure Cognitive Service</h1>
             <p class="lead">This page created to complete<br/><a href="https://www.dicoding.com/academies/83">Menjadi Azure Cloud Developer</a><br/>&copy; 2019 @adwiarifin</p>
+        </div>
+
+        <div class="upload-file">
+            <form method="POST" enctype="multipart/form-data">
+                Upload Image: 
+                <input type="file" name="image" />
+                <input type="submit" name="Upload" />
+            </form>
         </div>
 
         <table data-toggle="table">
