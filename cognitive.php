@@ -26,7 +26,7 @@ if (isset($_POST['submit'])) {
             $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
         } else if ($_POST['submit'] == 'Delete') {
             //Delete blob
-            $fileToUpload = $_POST['url'];
+            $fileToUpload = $_POST['name'];
             $blobClient->deleteBlob($containerName, $fileToUpload);
         }
     } catch(ServiceException $e) {
@@ -165,6 +165,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'Analyze') {
                 <td>
                     <form method="POST">
                         <input type="hidden" name="url" value="<?php echo $blob['url']; ?>" />
+                        <input type="hidden" name="url" value="<?php echo $blob['name']; ?>" />
                         <input type="submit" name="submit" value="Analyze"/>
                         <input type="submit" name="submit" value="Delete"/>
                     </form>
