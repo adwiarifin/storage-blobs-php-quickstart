@@ -10,7 +10,7 @@ use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
 use MicrosoftAzure\Storage\Blob\Models\CreateContainerOptions;
 use MicrosoftAzure\Storage\Blob\Models\PublicAccessType;
 
-$request = new HTTP_Request2('http://pear.php.net/', HTTP_Request2::METHOD_GET);
+$request = new HTTP_Request2('https://pear.php.net/', HTTP_Request2::METHOD_GET);
 try {
     $response = $request->send();
     if (200 == $response->getStatus()) {
