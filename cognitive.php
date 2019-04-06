@@ -165,7 +165,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'Analyze') {
                 <td>
                     <form method="POST">
                         <input type="hidden" name="url" value="<?php echo $blob['url']; ?>" />
-                        <input type="hidden" name="url" value="<?php echo $blob['name']; ?>" />
+                        <input type="hidden" name="name" value="<?php echo $blob['name']; ?>" />
                         <input type="submit" name="submit" value="Analyze"/>
                         <input type="submit" name="submit" value="Delete"/>
                     </form>
