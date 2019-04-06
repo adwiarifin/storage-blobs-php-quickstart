@@ -19,10 +19,16 @@ $data = array();
 
 if (isset($_POST['submit']) && $_POST['submit'] == 'Upload') {
     try {
-        //Upload blob
-        $fileToUpload = $_FILES["image"]["name"];
-        $content      = fopen($_FILES["image"]["tmp_name"], "r");
-        $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
+        if ($_POST['submit'] == 'Upload') {
+            //Upload blob
+            $fileToUpload = $_FILES["image"]["name"];
+            $content      = fopen($_FILES["image"]["tmp_name"], "r");
+            $blobClient->createBlockBlob($containerName, $fileToUpload, $content);
+        } else if ($_POST['submit'] == 'Delete') {
+            //Delete blob
+            $fileToUpload = $_POST['url'];
+            $blobClient->deleteBlob($containerName, $fileToUpload);
+        }
     } catch(ServiceException $e) {
         // Handle exception based on error codes and messages.
         // Error codes and messages are here:
@@ -160,6 +166,7 @@ if (isset($_POST['submit']) && $_POST['submit'] == 'Analyze') {
                     <form method="POST">
                         <input type="hidden" name="url" value="<?php echo $blob['url']; ?>" />
                         <input type="submit" name="submit" value="Analyze"/>
+                        <input type="submit" name="submit" value="Delete"/>
                     </form>
                     <?php echo isset($analyze[$blob['url']]) ? "<pre>" .json_encode(json_decode($analyze[$blob['url']]), JSON_PRETTY_PRINT) . "</pre>" : ""?>
                 </td>
