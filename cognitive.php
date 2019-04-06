@@ -16,6 +16,9 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
 $containerName = "adwicontainer";
 try {
     $data = array();
+
+    // List blobs.
+    $listBlobsOptions = new ListBlobsOptions();
     do{
         $result = $blobClient->listBlobs($containerName, $listBlobsOptions);
         foreach ($result->getBlobs() as $blob) {
