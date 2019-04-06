@@ -17,7 +17,7 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
 $containerName = "adwicontainer";
 $data = array();
 
-if (isset($_POST['submit']) && $_POST['submit'] == 'Upload') {
+if (isset($_POST['submit'])) {
     try {
         if ($_POST['submit'] == 'Upload') {
             //Upload blob
